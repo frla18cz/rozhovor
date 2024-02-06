@@ -1,0 +1,2 @@
+# rozhovor
+ Strukturovaný rozhovor, test
