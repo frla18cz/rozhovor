@@ -7,10 +7,11 @@ import os
 import requests
 from streamlit_lottie import st_lottie
 
+
 # Inicializace api key a ID. Uloženo na cloudu streamlit v secret
 openai.api_key = st.secrets["API_KEY"]
 assistant_id = st.secrets["ASSISTANT_ID"]
-# assistant_id = "asst_atZWsxED84ngEs7lXxCAKR9Q" #Pro testovací účely, light prompt
+# assistant_id = "asst_BKQW828sBQ2R22D6NVfgo1fB" #Pro testovací účely, light prompt
 client = openai
 
 
@@ -29,6 +30,7 @@ def initialize_session():
             st.session_state.initial_message_sent = True
 
 
+
 def send_initial_message():
     """Odesílá počáteční zprávu do chatu."""
     initial_message = "Zahajme hru!"
@@ -44,15 +46,13 @@ def chat():
     #     st.markdown(js, unsafe_allow_html=True)
 
     process_user_input()
-    lottie_animation("https://lottie.host/2b556f4b-1b93-477e-a421-9e31f4511246/tKYol4Wo3r.json", 3)
-
+    lottie_animation("https://lottie.host/2b556f4b-1b93-477e-a421-9e31f4511246/tKYol4Wo3r.json",3) 
 
 def display_messages():
     """Zobrazuje zprávy v chatovacím rozhraní."""
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
-
 
 def process_user_input():
     """Zpracovává uživatelský vstup a odesílá jej do OpenAI."""
@@ -61,7 +61,6 @@ def process_user_input():
         st.write("Já😊: ", prompt)
 
         send_message_to_openai(prompt)
-
 
 def send_message_to_openai(prompt):
     """
@@ -77,7 +76,7 @@ def send_message_to_openai(prompt):
         role="user",
         content=prompt
     )
-
+    
     # Vytvoření a spuštění dotazu pro OpenAI
     run = client.beta.threads.runs.create(
         thread_id=st.session_state.thread_id,
@@ -111,15 +110,13 @@ def send_message_to_openai(prompt):
 
     # Zpracování a zobrazení odpovědí asistenta
     assistant_messages_for_run = [
-        message for message in messages
+        message for message in messages 
         if message.run_id == run.id and message.role == "assistant"
     ]
     for message in assistant_messages_for_run:
         st.session_state.messages.append({"role": "assistant", "content": message.content[0].text.value})
         with st.chat_message("assistant"):
             st.markdown(message.content[0].text.value)
-
-
 def load_lottieurl(url: str):
     try:
         r = requests.get(url)
@@ -131,9 +128,8 @@ def load_lottieurl(url: str):
         st.error(f"Chyba požadavku: {e}")
     return None
 
-
 def lottie_animation_uvodni(lottie_url, key):
-    # Načtení Lottie animace z URL
+# Načtení Lottie animace z URL
     # lottie_url = lottie_url
     lottie_json = load_lottieurl(lottie_url)
 
@@ -144,10 +140,8 @@ def lottie_animation_uvodni(lottie_url, key):
         st.session_state.lottie_loaded = True
         with st.spinner(text='In progress'):
             time.sleep(1)
-
-
 def lottie_animation(lottie_url, key):
-    # Načtení Lottie animace z URL
+# Načtení Lottie animace z URL
     # lottie_url = lottie_url
     lottie_json = load_lottieurl(lottie_url)
 
@@ -159,16 +153,18 @@ def lottie_animation(lottie_url, key):
 st.set_page_config(page_title="Hádej, kdo jsem?", page_icon=":speech_balloon:")
 st.title("😊💡Hádej, kdo jsem?!🔍")
 
+
+
 current_directory = os.path.dirname(os.path.abspath(__file__))
 img_path = os.path.join(current_directory, 'img1.png')
 st.image(img_path, caption='', use_column_width=True)
 
-lottie_animation_uvodni("https://lottie.host/ae43b28d-b082-4249-bc22-144e1ceed7f7/ebUqhkyptl.json", 1)
+lottie_animation_uvodni("https://lottie.host/ae43b28d-b082-4249-bc22-144e1ceed7f7/ebUqhkyptl.json",1) 
 
 model_choice = st.sidebar.selectbox(
     'Vyberte model:',
-    ('gpt-4-0125-preview', 'gpt-4-preview', 'gpt-3.5-turbo-16k', 'gpt-3.5-turbo-0125'),
-    index=3
+    ('gpt-4-1106-preview', 'gpt-3.5-turbo-16k', 'gpt-3.5-turbo'),
+    index=0
 )
 
 initialize_session()
