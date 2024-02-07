@@ -140,7 +140,7 @@ def lottie_animation_uvodni(lottie_url, key):
     if lottie_json and ("lottie_loaded" not in st.session_state or not st.session_state.lottie_loaded):
         # Zobrazení Lottie animace s popiskem
         st_lottie(lottie_json, key=key, height=200, width=200)
-        st.text("Načítám hru...")
+        st.text("Načítám...")
         st.session_state.lottie_loaded = True
         with st.spinner(text='In progress'):
             time.sleep(1)
@@ -156,8 +156,8 @@ def lottie_animation(lottie_url, key):
 
 
 # Nastavení Streamlit
-st.set_page_config(page_title="Hádej, kdo jsem?", page_icon=":speech_balloon:")
-st.title("😊💡Hádej, kdo jsem?!🔍")
+st.set_page_config(page_title="Home page", page_icon=":speech_balloon:")
+st.title("😊💡Home page!🔍")
 
 current_directory = os.path.dirname(os.path.abspath(__file__))
 img_path = os.path.join(current_directory, 'img1.png')
