@@ -1,3 +1,4 @@
+import openai
 import streamlit as st
 import time
 from PIL import Image
@@ -9,20 +10,31 @@ import mysql.connector
 from modules.lottie import lottie_animation_uvodni, lottie_animation, load_lottieurl
 import secrets
 import toml
-
-try:
-    config = toml.load("secrets.toml")
-except Exception as e:
-    print(f"Chyba při načítání souboru secrets.toml: {e}")
+from modules.login import login
 
 
 
-# Inicializace api key a ID. Uloženo na cloudu streamlit v secret
-import openai
-openai.api_key = st.secrets["API_KEY"]
-assistant_id = st.secrets["ASSISTANT_ID"]
-# assistant_id = "asst_atZWsxED84ngEs7lXxCAKR9Q" #Pro testovací účely, light prompt
+
+
+local_debug_mode = True
+assistant_id = login(local_debug_mode)
 client = openai
+
+
+# if local_debug_mode == True:
+#     config = toml.load("secrets.toml")
+#     openai.api_key = config['api']['API_KEY']
+#     assistant_id = config['api']['ASSISTANT_ID']
+#     print(f"Připojení k OpenAI API lokálním klíčem")
+# else:
+#     #Inicializace api key a ID. Uloženo na cloudu streamlit v secret
+#     openai.api_key = st.secrets["API_KEY"]
+#     assistant_id = st.secrets["ASSISTANT_ID"]
+#     # assistant_id = "asst_atZWsxED84ngEs7lXxCAKR9Q" #Pro testovací účely, light prompt
+#     print("Připojení k OpenAI API secret klíčem na cloudu streamlit")
+#
+# client = openai
+
 
 
 # Úvodní zpráva, bude se používat v ostré verzi.
@@ -93,7 +105,7 @@ def send_message_to_openai(prompt):
     # Vytvoření a spuštění dotazu pro OpenAI
     run = client.beta.threads.runs.create(
         thread_id=st.session_state.thread_id,
-        assistant_id=assistant_id,
+        assistant_id=login.assistant_id,
     )
 
     # Čekání na dokončení dotazu
