@@ -1,4 +1,3 @@
-import openai
 import streamlit as st
 import time
 from PIL import Image
@@ -8,13 +7,23 @@ import requests
 from streamlit_lottie import st_lottie
 import mysql.connector
 from modules.lottie import lottie_animation_uvodni, lottie_animation, load_lottieurl
+import secrets
+import toml
+
+try:
+    config = toml.load("secrets.toml")
+except Exception as e:
+    print(f"Chyba při načítání souboru secrets.toml: {e}")
+
 
 
 # Inicializace api key a ID. Uloženo na cloudu streamlit v secret
+import openai
 openai.api_key = st.secrets["API_KEY"]
 assistant_id = st.secrets["ASSISTANT_ID"]
 # assistant_id = "asst_atZWsxED84ngEs7lXxCAKR9Q" #Pro testovací účely, light prompt
 client = openai
+
 
 # Úvodní zpráva, bude se používat v ostré verzi.
 # def initialize_session():
@@ -122,42 +131,6 @@ def send_message_to_openai(prompt):
         with st.chat_message("assistant"):
             st.markdown(message.content[0].text.value)
 
-
-# def load_lottieurl(url: str):
-#     try:
-#         r = requests.get(url)
-#         r.raise_for_status()
-#         return r.json()
-#     except requests.exceptions.HTTPError as e:
-#         st.error(f"Chyba při načítání Lottie URL: {e}")
-#     except requests.exceptions.RequestException as e:
-#         st.error(f"Chyba požadavku: {e}")
-#     return None
-#
-#
-# def lottie_animation_uvodni(lottie_url, key):
-#     # Načtení Lottie animace z URL
-#     # lottie_url = lottie_url
-#     lottie_json = load_lottieurl(lottie_url)
-#
-#     if lottie_json and ("lottie_loaded" not in st.session_state or not st.session_state.lottie_loaded):
-#         # Zobrazení Lottie animace s popiskem
-#         st_lottie(lottie_json, key=key, height=200, width=200)
-#         st.text("Načítám...")
-#         st.session_state.lottie_loaded = True
-#         with st.spinner(text='In progress'):
-#             time.sleep(1)
-#
-#
-# def lottie_animation(lottie_url, key):
-#     # Načtení Lottie animace z URL
-#     # lottie_url = lottie_url
-#     lottie_json = load_lottieurl(lottie_url)
-#
-#     # Zobrazení Lottie animace s popiskem
-#     st_lottie(lottie_json, key=key, height=200, width=200)
-#
-
 # Nastavení Streamlit
 st.set_page_config(page_title="Home page", page_icon=":speech_balloon:")
 st.title("😊💡Home page!🔍")
@@ -174,7 +147,6 @@ model_choice = st.sidebar.selectbox(
     index=3
 )
 
-# Zapíná úvodní zprávu
-# initialize_session()
+# initialize_session() #Zapíná úvodní zprávu
 chat()
 
