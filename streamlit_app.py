@@ -39,11 +39,11 @@ client = openai
 #             st.session_state.initial_message_sent = True
 
 
-def send_initial_message():
-    """Odesílá počáteční zprávu do chatu."""
-    initial_message = "Zahajme hru!"
-    st.session_state.messages = [{"role": "assistant", "content": initial_message}]
-    send_message_to_openai(initial_message)
+# def send_initial_message():
+#     """Odesílá počáteční zprávu do chatu."""
+#     initial_message = "Zahajme hru!"
+#     st.session_state.messages = [{"role": "assistant", "content": initial_message}]
+#     send_message_to_openai(initial_message)
 
 
 def chat():
@@ -72,6 +72,14 @@ def process_user_input():
 
         send_message_to_openai(prompt)
 
+def initialize_session():
+    """Inicializuje session state pro Streamlit aplikaci."""
+    if "thread_id" not in st.session_state:
+        # Tady byste měli vytvořit nové vlákno pomocí OpenAI API a uložit jeho ID
+        # Předpokládejme, že thread_id je získáno nějakou logikou inicializace
+        thread_id = "nějaké_nově_vytvořené_thread_id"
+        st.session_state.thread_id = thread_id
+        st.session_state.messages = []
 
 def send_message_to_openai(prompt):
     """
@@ -128,6 +136,8 @@ def send_message_to_openai(prompt):
         st.session_state.messages.append({"role": "assistant", "content": message.content[0].text.value})
         with st.chat_message("assistant"):
             st.markdown(message.content[0].text.value)
+
+initialize_session() #Zapíná úvodní zprávu
 
 # Nastavení Streamlit
 st.set_page_config(page_title="Home page", page_icon=":speech_balloon:")
