@@ -1,11 +1,7 @@
 import openai
 import streamlit as st
 import time
-from PIL import Image
-import base64
 import os
-import requests
-from streamlit_lottie import st_lottie
 import mysql.connector
 from modules.lottie import lottie_animation_uvodni, lottie_animation, load_lottieurl
 
@@ -18,18 +14,19 @@ client = openai
 
 #Úvodní zpráva, bude se používat v ostré verzi.
 def initialize_session():
-    """Inicializuje session state pro Streamlit aplikaci a automaticky spouští chat."""
+    """Inicializuje session state pro Streamlit aplikaci"""
     if "start_chat" not in st.session_state:
         st.session_state.start_chat = True
         thread = client.beta.threads.create()
         st.session_state.thread_id = thread.id
         st.session_state.messages = []
 
-    if "initial_message_sent" not in st.session_state:
-        # Kontrola, zda už nebyla úvodní zpráva přidána
-        if not any(message["content"] == "Zahajme hru!" for message in st.session_state.messages):
-            send_initial_message()
-            st.session_state.initial_message_sent = True
+    #Automaticky spouští chat.
+    # if "initial_message_sent" not in st.session_state:
+    #     # Kontrola, zda už nebyla úvodní zpráva přidána
+    #     if not any(message["content"] == "Zahajme hru!" for message in st.session_state.messages):
+    #         send_initial_message()
+    #         st.session_state.initial_message_sent = True
 
 
 def send_initial_message():
@@ -121,42 +118,6 @@ def send_message_to_openai(prompt):
         st.session_state.messages.append({"role": "assistant", "content": message.content[0].text.value})
         with st.chat_message("assistant"):
             st.markdown(message.content[0].text.value)
-
-
-# def load_lottieurl(url: str):
-#     try:
-#         r = requests.get(url)
-#         r.raise_for_status()
-#         return r.json()
-#     except requests.exceptions.HTTPError as e:
-#         st.error(f"Chyba při načítání Lottie URL: {e}")
-#     except requests.exceptions.RequestException as e:
-#         st.error(f"Chyba požadavku: {e}")
-#     return None
-#
-#
-# def lottie_animation_uvodni(lottie_url, key):
-#     # Načtení Lottie animace z URL
-#     # lottie_url = lottie_url
-#     lottie_json = load_lottieurl(lottie_url)
-#
-#     if lottie_json and ("lottie_loaded" not in st.session_state or not st.session_state.lottie_loaded):
-#         # Zobrazení Lottie animace s popiskem
-#         st_lottie(lottie_json, key=key, height=200, width=200)
-#         st.text("Načítám...")
-#         st.session_state.lottie_loaded = True
-#         with st.spinner(text='In progress'):
-#             time.sleep(1)
-#
-#
-# def lottie_animation(lottie_url, key):
-#     # Načtení Lottie animace z URL
-#     # lottie_url = lottie_url
-#     lottie_json = load_lottieurl(lottie_url)
-#
-#     # Zobrazení Lottie animace s popiskem
-#     st_lottie(lottie_json, key=key, height=200, width=200)
-#
 
 # Nastavení Streamlit
 st.set_page_config(page_title="Home page", page_icon=":speech_balloon:")
