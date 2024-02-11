@@ -16,20 +16,20 @@ assistant_id = st.secrets["ASSISTANT_ID"]
 # assistant_id = "asst_atZWsxED84ngEs7lXxCAKR9Q" #Pro testovací účely, light prompt
 client = openai
 
-# Úvodní zpráva, bude se používat v ostré verzi.
-# def initialize_session():
-#     """Inicializuje session state pro Streamlit aplikaci a automaticky spouští chat."""
-#     if "start_chat" not in st.session_state:
-#         st.session_state.start_chat = True
-#         thread = client.beta.threads.create()
-#         st.session_state.thread_id = thread.id
-#         st.session_state.messages = []
-#
-#     if "initial_message_sent" not in st.session_state:
-#         # Kontrola, zda už nebyla úvodní zpráva přidána
-#         if not any(message["content"] == "Zahajme hru!" for message in st.session_state.messages):
-#             send_initial_message()
-#             st.session_state.initial_message_sent = True
+#Úvodní zpráva, bude se používat v ostré verzi.
+def initialize_session():
+    """Inicializuje session state pro Streamlit aplikaci a automaticky spouští chat."""
+    if "start_chat" not in st.session_state:
+        st.session_state.start_chat = True
+        thread = client.beta.threads.create()
+        st.session_state.thread_id = thread.id
+        st.session_state.messages = []
+
+    if "initial_message_sent" not in st.session_state:
+        # Kontrola, zda už nebyla úvodní zpráva přidána
+        if not any(message["content"] == "Zahajme hru!" for message in st.session_state.messages):
+            send_initial_message()
+            st.session_state.initial_message_sent = True
 
 
 def send_initial_message():
@@ -175,6 +175,6 @@ model_choice = st.sidebar.selectbox(
 )
 
 # Zapíná úvodní zprávu
-# initialize_session()
+initialize_session()
 chat()
 
