@@ -2,8 +2,8 @@ import openai
 import streamlit as st
 import time
 import os
-import mysql.connector
 from modules.lottie import lottie_animation_uvodni, lottie_animation, load_lottieurl
+
 
 
 # Inicializace api key a ID. Uloženo na cloudu streamlit v secret

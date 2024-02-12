@@ -1,5 +1,7 @@
-openai
-streamlit
-Pillow
+openai~=1.11.1
+streamlit~=1.31.0
+Pillow~=10.2.0
 streamlit-lottie
 mysql-connector-python
+requests
+toml
